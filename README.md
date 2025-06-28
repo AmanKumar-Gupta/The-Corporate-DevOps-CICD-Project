@@ -30,24 +30,32 @@ This repository contains a simple Node.js API and a React client used for a user
 
 The client now displays an animated banner welcoming you to **DevOps Shack**.
 
+---
 
-Local Mysql setup using docker and commands to setup tables
+## Local MySQL Setup Using Docker
 
+Run the following command to start a MySQL container:
+
+```bash
 docker run -d \
   --name mysql-container \
-  --network backend-network \
   -e MYSQL_ROOT_PASSWORD=Aditya \
   -e MYSQL_DATABASE=crud_app \
-  -e MYSQL_USER=root \
-  -e MYSQL_PASSWORD=Aditya \
   -p 3306:3306 \
   mysql:latest
+```
 
-Connect to MySQL Container to Create Tables
+### Connect to MySQL Container to Create Tables
 
+After a few seconds, run:
+
+```bash
 docker exec -it mysql-container mysql -u root -pAditya crud_app
+```
+
 Then paste and execute the following SQL commands:
 
+```sql
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -57,3 +65,4 @@ CREATE TABLE IF NOT EXISTS users (
     is_active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
