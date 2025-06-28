@@ -8,6 +8,19 @@ This project contains Terraform configurations for deploying various EC2 instanc
    - File: `jenkins-instance.tf`
    - Description: This configuration defines an EC2 instance with Jenkins installed. It includes necessary resource configurations such as instance type, AMI, security groups, and user data to install Jenkins.
 
+   Jenkins Plugins:
+   sonarqube scanner
+   maven integration
+   config file provider
+   pipeline maven integration
+   docker pipeline
+   kubernetes 
+   kubernetes credentials
+   kubernetes client api
+   kubernetes cli 
+   generic webhook trigger
+
+
 2. **SonarQube Instance**
    - File: `sonarqube-instance.tf`
    - Description: This configuration defines an EC2 instance with SonarQube installed. It includes similar resource configurations as the Jenkins instance, tailored to install SonarQube via user data.
