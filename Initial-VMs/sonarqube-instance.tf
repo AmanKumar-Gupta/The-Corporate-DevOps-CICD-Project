@@ -12,6 +12,7 @@ resource "aws_instance" "sonarqube" {
     sudo systemctl start docker
     sudo systemctl enable docker
     sudo usermod -aG docker $USER
+    newgrp docker
     docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
   EOF
 
