@@ -39,7 +39,7 @@ function Layout({ children }) {
           </div>
           <ul className="social-links">
             <li>
-              <a className="sidebar-btn linkedin" href="https://www.linkedin.com/in/amankg/" target="_blank" rel="noopener noreferrer">
+              <a className="sidebar-btn linkedin" href="https://www.linkedin.com/in/amankg1/" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-linkedin-in"></i>
                 <span>LinkedIn</span>
               </a>
