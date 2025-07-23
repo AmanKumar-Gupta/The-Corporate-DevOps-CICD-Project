@@ -12,6 +12,8 @@ resource "aws_instance" "jenkins" {
     sudo systemctl enable docker
     sudo usermod -aG docker $USER
     newgrp docker
+    sudo apt-get update -y
+    sudo apt-get install docker-compose-plugin -y
 
     # Jenkins installation
     sudo mkdir -p /etc/apt/keyrings
