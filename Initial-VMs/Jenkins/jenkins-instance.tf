@@ -11,6 +11,7 @@ resource "aws_instance" "jenkins" {
     sudo systemctl start docker
     sudo systemctl enable docker
     sudo usermod -aG docker $USER
+    
     newgrp docker
     sudo apt-get update -y
     sudo apt-get install docker-compose-plugin -y
@@ -23,6 +24,8 @@ resource "aws_instance" "jenkins" {
     sudo apt-get install -y jenkins
     sudo systemctl start jenkins
     sudo systemctl enable jenkins
+    sudo usermod -aG docker jenkins
+    sudo systemctl restart jenkins
 
     # Trivy installation
     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
@@ -30,6 +33,12 @@ resource "aws_instance" "jenkins" {
     sudo apt-get update -y
     sudo apt-get install -y trivy
     sudo apt install gitleaks -y
+
+    # Install Docker Compose
+    DOCKER_CONFIG=$${DOCKER_CONFIG:-$${HOME}/.docker}
+    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/download/v2.38.2/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
   EOF
 
   tags = {
