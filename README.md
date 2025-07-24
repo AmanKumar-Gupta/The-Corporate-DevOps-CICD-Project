@@ -66,3 +66,13 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
+plugins
+
+sonar scanner
+docker pipeline
+nodejs
+kubernetes
+stageview
+
+conigure webhook in sonar server
