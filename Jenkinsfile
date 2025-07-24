@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'deploy-to-dev-k8', url: 'https://github.com/jaiswaladi246/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'k8-deployment', url: 'https://github.com/AmanKumar-Gupta/The-Corporate-DevOps-CICD-Project.git'
             }
         }
         
@@ -65,9 +65,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('api') {
-                            sh 'docker build -t adijaiswal/backend:latest .'
-                            sh 'trivy image --format table -o backend-image-report.html adijaiswal/backend:latest '
-                            sh 'docker push adijaiswal/backend:latest'
+                            sh 'docker build -t amankumargupta/backend:latest .'
+                            sh 'trivy image --format table -o backend-image-report.html amankumargupta/backend:latest '
+                            sh 'docker push amankumargupta/backend:latest'
                            
                         }
                     }
@@ -80,9 +80,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('client') {
-                            sh 'docker build -t adijaiswal/frontend:latest .'
-                            sh 'trivy image --format table -o frontend-image-report.html adijaiswal/frontend:latest '
-                            sh 'docker push adijaiswal/frontend:latest'
+                            sh 'docker build -t amankumargupta/frontend:latest .'
+                            sh 'trivy image --format table -o frontend-image-report.html amankumargupta/frontend:latest '
+                            sh 'docker push amankumargupta/frontend:latest'
                         }
                     }
                 }
@@ -93,11 +93,11 @@ pipeline {
         stage('K8-deploy') {
             steps {
                 script {
-                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'dev', restrictKubeConfigAccess: false, serverUrl: 'https://042CDFB283295491DDF7A7A422346F3B.gr7.ap-south-1.eks.amazonaws.com') {
-                            sh 'kubectl apply -f k8s/sc.yaml -n dev'
-                            sh 'kubectl apply -f k8s/mysql.yaml -n dev'
-                            sh 'kubectl apply -f k8s/backend.yaml -n dev'
-                            sh 'kubectl apply -f k8s/frontend.yaml -n dev'
+                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://033DA018D981DD089D5FCBCB7F816E76.sk1.ap-south-1.eks.amazonaws.com') {
+                            sh 'kubectl apply -f k8s/sc.yaml -n webapps'
+                            sh 'kubectl apply -f k8s/mysql.yaml -n webapps'
+                            sh 'kubectl apply -f k8s/backend.yaml -n webapps'
+                            sh 'kubectl apply -f k8s/frontend.yaml -n webapps'
                             sleep 30
                         }
                 }
@@ -107,9 +107,9 @@ pipeline {
         stage('verify-K8-deploy') {
             steps {
                 script {
-                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'dev', restrictKubeConfigAccess: false, serverUrl: 'https://042CDFB283295491DDF7A7A422346F3B.gr7.ap-south-1.eks.amazonaws.com') {
-                            sh 'kubectl get pods -n dev'
-                            sh 'kubectl get svc -n dev'
+                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://033DA018D981DD089D5FCBCB7F816E76.sk1.ap-south-1.eks.amazonaws.com') {
+                            sh 'kubectl get pods -n webapps'
+                            sh 'kubectl get svc -n webapps'
                             
                         }
                 }
