@@ -13,8 +13,6 @@ resource "aws_instance" "jenkins" {
     sudo usermod -aG docker $USER
     
     newgrp docker
-    sudo apt-get update -y
-    sudo apt-get install docker-compose-plugin -y
 
     # Jenkins installation
     sudo mkdir -p /etc/apt/keyrings
@@ -35,11 +33,16 @@ resource "aws_instance" "jenkins" {
     sudo apt install gitleaks -y
 
     # Install Docker Compose
-    DOCKER_CONFIG=$${DOCKER_CONFIG:-$${HOME}/.docker}
-    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/download/v2.38.2/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+    sudo mkdir -p /usr/local/lib/docker/cli-plugins
+    DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
+    sudo curl -SL https://github.com/docker/compose/releases/download/$${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+    sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
   EOF
+
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
 
   tags = {
     Name = "Jenkins-Instance"
