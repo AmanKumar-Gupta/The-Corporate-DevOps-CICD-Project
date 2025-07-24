@@ -94,10 +94,10 @@ pipeline {
             steps {
                 script {
                     withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://033DA018D981DD089D5FCBCB7F816E76.sk1.ap-south-1.eks.amazonaws.com') {
-                            sh 'kubectl apply -f k8s/sc.yaml -n webapps'
-                            sh 'kubectl apply -f k8s/mysql.yaml -n webapps'
-                            sh 'kubectl apply -f k8s/backend.yaml -n webapps'
-                            sh 'kubectl apply -f k8s/frontend.yaml -n webapps'
+                            sh 'kubectl apply -f k8s-config/sc.yaml -n webapps'
+                            sh 'kubectl apply -f k8s-config/mysql.yaml -n webapps'
+                            sh 'kubectl apply -f k8s-config/backend.yaml -n webapps'
+                            sh 'kubectl apply -f k8s-config/frontend.yaml -n webapps'
                             sleep 30
                         }
                 }

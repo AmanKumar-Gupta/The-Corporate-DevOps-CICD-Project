@@ -32,6 +32,12 @@ resource "aws_instance" "jenkins" {
     sudo apt-get install -y trivy
     sudo apt install gitleaks -y
 
+    # Install kubectl
+    KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+    curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    rm kubectl
+
     # Install Docker Compose
     sudo mkdir -p /usr/local/lib/docker/cli-plugins
     DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
