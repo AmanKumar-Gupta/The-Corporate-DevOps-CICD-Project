@@ -8,7 +8,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: jenkins
-  namespace: webapps
+  namespace: prod
 ```
 
 
@@ -18,7 +18,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: jenkins-role
-  namespace: webapps
+  namespace: prod
 rules:
   # Permissions for core API resources
   - apiGroups: [""]
@@ -58,7 +58,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: jenkins-rolebinding
-  namespace: webapps
+  namespace: prod
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -66,7 +66,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: jenkins
-    namespace: webapps
+    namespace: prod
 ```
 
 
@@ -109,7 +109,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: jenkins
-    namespace: webapps
+    namespace: prod
 ```
 
 
