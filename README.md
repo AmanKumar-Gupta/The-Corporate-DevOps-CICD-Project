@@ -76,3 +76,35 @@ kubernetes
 stageview
 
 conigure webhook in sonar server
+
+configure webhook in github
+
+install generic webhook plugin in jenkins
+
+Step 3: Configure Post Parameters
+
+1. In the Post Parameters section, add the following:
+
+Variable: ref
+
+Expression (JSON): $.ref
+
+Step 4: Write a string as Token
+
+Token = amankumargupta123
+1. Write any keyword string as token that will be used in the webhook URL.
+
+Step 5: Configure Optional Filter
+
+1. In the Optional Filter section, configure the following:
+
+Expression: refs/heads/branch_name (Replace branch_name with the name of your
+branch)
+
+Text: $ref
+Step 6: Configure GitHub Webhook
+
+1.
+Go to your GitHub repository settings.
+
+2. Navigate to Webhooks.
