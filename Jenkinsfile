@@ -90,32 +90,43 @@ pipeline {
              
         }  
         
-        stage('K8-deploy') {
+        stage('Manual Approval for Production') {
             steps {
-                script {
-                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://033DA018D981DD089D5FCBCB7F816E76.sk1.ap-south-1.eks.amazonaws.com') {
-                            sh 'kubectl apply -f k8s-config/sc.yaml -n webapps'
-                            sh 'kubectl apply -f k8s-config/mysql.yaml -n webapps'
-                            sh 'kubectl apply -f k8s-config/backend.yaml -n webapps'
-                            sh 'kubectl apply -f k8s-config/frontend.yaml -n webapps'
-                            sleep 30
-                        }
+                timeout(time: 1, unit: 'HOURS') {
+                    input message: 'Approve deployment to PRODUCTION?', ok: 'Deploy'
                 }
             }
         }
         
-        stage('verify-K8-deploy') {
+       stage('Deployment To Prod') {
             steps {
                 script {
-                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://033DA018D981DD089D5FCBCB7F816E76.sk1.ap-south-1.eks.amazonaws.com') {
-                            sh 'kubectl get pods -n webapps'
-                            sh 'kubectl get svc -n webapps'
-                            
-                        }
+                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://81C96460F85261E25A80B5B7FA10BD41.gr7.ap-south-1.eks.amazonaws.com') {
+                        sh 'kubectl apply -f k8s-prod/sc.yaml'
+                        sleep 20
+                        sh 'kubectl apply -f k8s-prod/mysql.yaml -n prod'
+                        sh 'kubectl apply -f k8s-prod/backend.yaml -n prod'
+                        sh 'kubectl apply -f k8s-prod/frontend.yaml -n prod'
+                        sh 'kubectl apply -f k8s-prod/ci.yaml'
+                        sh 'kubectl apply -f k8s-prod/ingress.yaml -n prod'
+                        sleep 30
+                    }
                 }
             }
         }
         
+        stage('Verify Deployment To Prod') {
+            steps {
+                script {
+                    withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://81C96460F85261E25A80B5B7FA10BD41.gr7.ap-south-1.eks.amazonaws.com') {
+                        sh 'kubectl get pods -n prod'
+                        sleep 20
+                         sh 'kubectl get ingress -n prod'
+                        
+                    }
+                }
+            }
+        }
             
     }
 }
